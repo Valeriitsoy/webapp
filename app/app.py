@@ -1,9 +1,26 @@
-from flask import Flask, request, make_response
+from flask import Flask, request, make_response, render_template_string
 from datetime import datetime
 
 app = Flask(__name__)
 
 author = 'Tsoi Valera'
+
+
+@app.route('/', methods=['GET'])
+def index():
+    """Передать в name=<script>alert('АТАКА XSS')</script>"""
+    html = '''
+    <html>
+        <body>
+            <h3>Введите имя:</h3>
+            <form method="POST" action="/hello">
+                <input type="text" name="name" required placeholder="Введите имя">
+                <button type="submit">Отправить</button>
+            </form>
+        </body>
+    </html>
+    '''
+    return render_template_string(html)
 
 
 @app.route('/date', methods=['GET'])
